@@ -1,7 +1,7 @@
 import { cn } from "@/lib/utils";
 import { marked } from "marked";
 import type * as React from "react";
-import { Suspense, isValidElement, memo, useMemo } from "react";
+import { Suspense, isValidElement, memo, useMemo, useState, useEffect } from "react";
 import ReactMarkdown, { type Components } from "react-markdown";
 import remarkGfm from "remark-gfm";
 
@@ -15,8 +15,8 @@ const extractTextContent = (node: React.ReactNode): string => {
 	if (Array.isArray(node)) {
 		return node.map(extractTextContent).join("");
 	}
-	if (isValidElement(node)) {
-		return extractTextContent(node.props.children);
+	if (isValidElement(node) && node?.props) {
+		return extractTextContent((node as any).props.children);
 	}
 	return "";
 };
@@ -26,11 +26,57 @@ interface HighlightedPreProps extends React.HTMLAttributes<HTMLPreElement> {
 }
 
 const HighlightedPre = memo(
-	async ({ children, className, language, ...props }: HighlightedPreProps) => {
-		const { codeToTokens, bundledLanguages } = await import("shiki");
-		const code = extractTextContent(children);
+	({ children, className, language, ...props }: HighlightedPreProps) => {
+		const [tokens, setTokens] = useState<any[]>([]);
+		const [isLoading, setIsLoading] = useState(true);
+		const [error, setError] = useState<string | null>(null);
 
-		if (!(language in bundledLanguages)) {
+		useEffect(() => {
+			const highlightCode = async () => {
+				try {
+					const { codeToTokens, bundledLanguages } = await import("shiki");
+					const code = extractTextContent(children);
+
+					if (!(language in bundledLanguages)) {
+						setIsLoading(false);
+						return;
+					}
+
+					const result = await codeToTokens(code, {
+						lang: language as keyof typeof bundledLanguages,
+						themes: {
+							light: "github-dark",
+							dark: "github-dark",
+						},
+					});
+					setTokens(result.tokens);
+				} catch (err) {
+					setError('Failed to highlight code');
+				} finally {
+					setIsLoading(false);
+				}
+			};
+
+			highlightCode();
+		}, [children, language]);
+
+		if (isLoading) {
+			return (
+				<pre {...props} className={cn(DEFAULT_PRE_BLOCK_CLASS, className)}>
+					<code className="whitespace-pre-wrap">Loading...</code>
+				</pre>
+			);
+		}
+
+		if (error) {
+			return (
+				<pre {...props} className={cn(DEFAULT_PRE_BLOCK_CLASS, className)}>
+					<code className="whitespace-pre-wrap">{error}</code>
+				</pre>
+			);
+		}
+
+		if (tokens.length === 0) {
 			return (
 				<pre {...props} className={cn(DEFAULT_PRE_BLOCK_CLASS, className)}>
 					<code className="whitespace-pre-wrap">{children}</code>
@@ -38,49 +84,26 @@ const HighlightedPre = memo(
 			);
 		}
 
-		const { tokens } = await codeToTokens(code, {
-			lang: language as keyof typeof bundledLanguages,
-			themes: {
-				light: "github-dark",
-				dark: "github-dark",
-			},
-		});
-
 		return (
 			<pre {...props} className={cn(DEFAULT_PRE_BLOCK_CLASS, className)}>
 				<code className="whitespace-pre-wrap">
-					{tokens.map((line, lineIndex) => (
-						<span
-							key={`line-${
-								// biome-ignore lint/suspicious/noArrayIndexKey: Needed for react key
-								lineIndex
-							}`}
-						>
-							{line.map((token, tokenIndex) => {
-								const style =
-									typeof token.htmlStyle === "string"
-										? undefined
-										: token.htmlStyle;
-
-								return (
-									<span
-										key={`token-${
-											// biome-ignore lint/suspicious/noArrayIndexKey: Needed for react key
-											tokenIndex
-										}`}
-										style={style}
-									>
-										{token.content}
-									</span>
-								);
-							})}
-							{lineIndex !== tokens.length - 1 && "\n"}
+					{tokens.map((line: any, lineIndex: number) => (
+						<span key={`line-${lineIndex}`}>
+							{line.map((token: any, tokenIndex: number) => (
+								<span
+									key={`token-${tokenIndex}`}
+									style={typeof token.htmlStyle === 'string' ? undefined : token.htmlStyle}
+								>
+									{token.content}
+								</span>
+							))}
+							{lineIndex !== tokens.length - 1 && '\n'}
 						</span>
 					))}
 				</code>
 			</pre>
 		);
-	},
+	}
 );
 
 HighlightedPre.displayName = "HighlightedPre";

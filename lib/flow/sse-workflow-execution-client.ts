@@ -41,8 +41,10 @@ export class SSEWorkflowExecutionClient {
 			let buffer = "";
 
 			// eslint-disable-next-line no-constant-condition
-			while (true) {
-				const { done, value } = await this.reader.read();
+			outerLoop: while (true) {
+				const readerReadResult = await this.reader?.read();
+				const done: boolean = readerReadResult?.done || false;
+				const value: Uint8Array | undefined = readerReadResult?.value;
 				if (done) {
 					break;
 				}
@@ -68,7 +70,7 @@ export class SSEWorkflowExecutionClient {
 								case "complete": {
 									handlers.onComplete({ timestamp: data.timestamp });
 									this.disconnect();
-									break;
+									break outerLoop;
 								}
 							}
 						} catch (error) {
