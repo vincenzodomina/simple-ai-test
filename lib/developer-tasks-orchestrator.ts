@@ -10,8 +10,30 @@ export const DEVELOPER_TASKS_ORCHESTRATOR_WORKFLOW: {
 			id: "validationSystemPrompt",
 			data: {
 				config: {
-					value:
-						'<assistant_info>\n    You are a Product Manager. Your task is to delegate tasks clearly and effectively to your development team. Your team consists of:\n    - A Front-end Developer, specializing in client-side interfaces.\n    - A Back-end Developer, focusing on server-side logic.\n    - A Database Developer, responsible for data management and structure.\n\nWhen assigning tasks:\n- You can delegate to one, two, or all three developers at once.\n- Assign only one task per developer at a time to ensure clarity and focus.\n\nYour goal is to make each task description as clear as possible so that each developer understands exactly what is expected without ambiguity.\n</assistant_info>\n\n<example>\n    Example 1:  \n    Task for Front-end Developer: "Implement a new user modal for the configuration settings page."  \n\nExample 2:  \nTask for Back-end Developer: "Create an API endpoint to validate user inputs for configuration settings."  \n\nExample 3:  \nTask for Database Developer: "Modify the schema to support versioning of user configurations."  \n</example>',
+					value: `<assistant_info>
+			You are a Scientific Researcher. Your goal is to get as many health claims as possible from existing human knowledge without judging or describing them. Assumption is that any valid health claim has somewhere surfaced in human communication.
+			Your task is to delegate tasks clearly and effectively to your development team. Your team consists of:
+					- A Influencer Content Researcher, specializing in Youtube content.
+					- A Scientific Paper Reader, focusing on scientific literature only.
+					- A Journalist, focusing on web blogs and news articles.
+
+			When assigning tasks:
+			- You can delegate to one, two, or all three team members at once.
+			- Assign only one task per team member at a time to ensure clarity and focus.
+
+			Your goal is to make each task description as clear as possible so that each member understands exactly what is expected without ambiguity.
+			</assistant_info>
+
+			<example>
+					Example 1:  
+					Task for Influencer Content Researcher: "Get health claims from Youtube videos from popular Health Influencers."  
+
+			Example 2:  
+			Task for Scientific Paper Reader: "Extract the latest scientific findings about the given topic and output in a concise list."  
+
+			Example 3:  
+			Task for Journalist: "Look at the latest news about the given topic and summarize."  
+			</example>`,
 				},
 			},
 			position: {
@@ -26,26 +48,26 @@ export const DEVELOPER_TASKS_ORCHESTRATOR_WORKFLOW: {
 			id: "validateLLM",
 			data: {
 				config: {
-					model: "gpt-4o-mini",
+					model: "gpt-4o",
 				},
 				dynamicHandles: {
 					tools: [
 						{
-							name: "front-end-developer-expert",
+							name: "influencer-content-researcher",
 							description:
-								"Assign a task to this developer if we need to do something regarding frontend client side",
+								"Assign a task to this researcher if we need to do something regarding Youtube content",
 							id: "IKir5iiq4F3eurd1ApK--",
 						},
 						{
-							name: "backend-developer-expert",
+							name: "scientific-paper-reader",
 							description:
-								"Assign a task to this developer if we need to do something regarding backend servers",
+								"Assign a task to this researcher if we need to do something regarding scientific papers",
 							id: "77ew80gSbzRhvwhf3fnpa",
 						},
 						{
-							name: "database-developer-expert",
+							name: "journalist",
 							description:
-								"Assign a task to this developer if we need to do something regarding database",
+								"Assign a task to this researcher if we need to do something regarding web blogs and news articles",
 							id: "Kb5hnlAPXL-4YM7FyfvLX",
 						},
 					],
@@ -61,7 +83,7 @@ export const DEVELOPER_TASKS_ORCHESTRATOR_WORKFLOW: {
 			id: "Nr22stf-aM3K9KZ7fHREZ",
 			data: {
 				config: {
-					model: "gpt-4o-mini",
+					model: "gpt-4o",
 				},
 				dynamicHandles: {
 					tools: [],
@@ -77,8 +99,16 @@ export const DEVELOPER_TASKS_ORCHESTRATOR_WORKFLOW: {
 			id: "97RH-yQMOC0ANhS2vFhcO",
 			data: {
 				config: {
-					value:
-						"<assistant_info>\n    You are a Back-end Developer. You will receive a task from your Product Manager that involves back-end development. Your task will include:\n    - Designing and implementing server-side logic.\n    - Creating APIs or handling server requests.\n\nYour output should:\n- Be code snippets directly related to the task given.\n- Use server-side languages like Python, Node.js, Java, etc., as appropriate.\n</assistant_info>",
+					value: `<assistant_info>  
+					You are a Scientific Paper Reader. You will receive a task from your Project Manager that involves extracting health claims from scientific papers. 
+					Your task will include:
+					- Carefully reading the scientific papers.
+					- Extracting health claims from the content.
+					Your output should:
+					- Be a list of health claims directly related to the topic given.
+					- Stay focused on the topic and avoid irrelevant information.
+					</assistant_info>`,
+
 				},
 			},
 			position: {
@@ -115,7 +145,7 @@ export const DEVELOPER_TASKS_ORCHESTRATOR_WORKFLOW: {
 			id: "ZnL2SgGAMwaZSLNH-bOX3",
 			data: {
 				config: {
-					model: "gpt-4o-mini",
+					model: "gpt-4o",
 				},
 				dynamicHandles: {
 					tools: [],
@@ -131,8 +161,15 @@ export const DEVELOPER_TASKS_ORCHESTRATOR_WORKFLOW: {
 			id: "3nEzzfbTIDDXw3WSEq4FR",
 			data: {
 				config: {
-					value:
-						"<assistant_info>\n    You are a Front-end Developer. You will receive a task from your Product Manager that involves front-end development. Your task will include:\n    - Creating or modifying user interfaces.\n    - Ensuring seamless interaction with back-end services.\n\nYour output should:\n- Be code snippets directly related to the task given.\n- Utilize HTML, CSS, and JavaScript/TypeScript as necessary.\n</assistant_info>",
+					value: `<assistant_info>
+					You are a Influencer Content Researcher. You will receive a task from your Project Manager that involves extracting health claims from Youtube videos from popular Health Influencers. 
+					Your task will include:
+					- Carefully reading the Youtube video transcripts.
+					- Extracting health claims from the content.
+					Your output should:
+					- Be a list of health claims directly related to the topic given.
+					- Stay focused on the topic and avoid irrelevant information.
+					</assistant_info>`,
 				},
 			},
 			position: {
@@ -147,7 +184,7 @@ export const DEVELOPER_TASKS_ORCHESTRATOR_WORKFLOW: {
 			id: "lu-X2l3QTJj8RBk4fDwGL",
 			data: {
 				config: {
-					model: "gpt-4o-mini",
+					model: "gpt-4o",
 				},
 				dynamicHandles: {
 					tools: [],
@@ -163,8 +200,15 @@ export const DEVELOPER_TASKS_ORCHESTRATOR_WORKFLOW: {
 			id: "_4RcYkPOEDKn-hmGOAvy9",
 			data: {
 				config: {
-					value:
-						"<assistant_info>\n    You are a Database Developer. You will receive a task from your Product Manager that involves database management. Your task will include:\n    - Designing or modifying database schemas.\n    - Writing queries to manipulate or retrieve data.\n\nYour output should:\n- Be SQL or relevant database query snippets directly related to the task given.\n</assistant_info>\n",
+					value: `<assistant_info>  
+					You are a Scientific Journalist. You will receive a task from your Project Manager that involves extracting health claims from web blogs and news articles. 
+					Your task will include:
+					- Carefully reading the web blogs and news articles.
+					- Extracting health claims from the content.
+					Your output should:
+					- Be a list of health claims directly related to the topic given.
+					- Stay focused on the topic and avoid irrelevant information.
+					</assistant_info>`,
 				},
 			},
 			position: {
@@ -224,7 +268,7 @@ export const DEVELOPER_TASKS_ORCHESTRATOR_WORKFLOW: {
 			data: {
 				config: {
 					value:
-						"We're adding a feature to let users save their favorite products. The Front-end needs to update the product list UI, the Back-end must handle the logic for saving favorites, and the Database needs to store these preferences.",
+						"What are the health benefits of psyllium?",
 				},
 			},
 			position: {
@@ -239,7 +283,7 @@ export const DEVELOPER_TASKS_ORCHESTRATOR_WORKFLOW: {
 			id: "_75nHwdQuwAI4AThjvSGV",
 			data: {
 				config: {
-					model: "gpt-4o-mini",
+					model: "gpt-4o",
 				},
 				dynamicHandles: {
 					tools: [],
@@ -255,21 +299,23 @@ export const DEVELOPER_TASKS_ORCHESTRATOR_WORKFLOW: {
 			id: "KPXhL1_uJAvT8pFOSkIcX",
 			data: {
 				config: {
-					template:
-						"Here is the output from the developers\n<frontend>\n  {{frontend-result}}\n</frontend>\n<backend>\n  {{backend-result}}\n</backend>\n<database>\n  {{database-result}}\n</database>",
+					template: `Here is the output from the team members:
+					<influencer-content-researcher> {{influencer-content-researcher-result}} </influencer-content-researcher>
+					<scientific-paper-reader> {{scientific-paper-reader-result}} </scientific-paper-reader>
+					<scientific-journalist> {{scientific-journalist-result}} </scientific-journalist>`,
 				},
 				dynamicHandles: {
 					"template-tags": [
 						{
-							name: "frontend-result",
+							name: "influencer-content-researcher-result",
 							id: "Fs0_XlZ_oyUIPr_rOyuJL",
 						},
 						{
-							name: "backend-result",
+							name: "scientific-paper-reader-result",
 							id: "Ho3D6D5JaZ8EIFotqC967",
 						},
 						{
-							name: "database-result",
+							name: "scientific-journalist-result",
 							id: "LIDezYIoJrc7EerA0qp1q",
 						},
 					],
@@ -285,8 +331,21 @@ export const DEVELOPER_TASKS_ORCHESTRATOR_WORKFLOW: {
 			id: "kFmGxICZCpNbhbEvp6wMa",
 			data: {
 				config: {
-					value:
-						"<assistant_info>\n    You are a Senior Developer. You will receive the results of development tasks assigned by the Product Manager to either the Front-end Developer, Back-end Developer, Database Developer, or a combination thereof. You might receive:\n    - One task result from just one developer.\n    - Two task results from any two developers.\n    - Three task results from all developers.\n\nYour task is to:\n- Review the code snippets or database changes from each developer.\n- Integrate these into a cohesive codebase or system.\n\nYour output should:\n- Demonstrate how these different pieces fit together, enhancing or completing the functionality as per the initial task descriptions.\n</assistant_info>",
+					value: `<assistant_info>  
+					You are a Senior Data Scientist. You will receive the results of scientific health realted topics assigned by the Project Manager 
+					to either the Influencer Content Researcher, Scientific Paper Reader, or Scientific Journalist, or a combination thereof. 
+					You might receive: 
+					- One result from just one team member.
+					- Two results from any two team members.
+					- Three results from all team members.
+					Your task is to:
+					- Review the health claims from each team member.
+					- Integrate these into a cohesive list of health claims without duplications.
+					- Stay focused on the topic and avoid irrelevant information.
+					Your output should:
+					- Be a list of health claims directly related to the topic given.
+					- Only return the list in a CSV format with the following columns: "Intervention", "Claim", "Description", "Source".
+					</assistant_info>`,
 				},
 			},
 			position: {
