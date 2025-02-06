@@ -34,7 +34,7 @@ const edgeTypes: EdgeTypes = {
 	status: StatusEdgeController as any,
 };
 
-export function Flow() {
+function Flow() {
 	const store = useWorkflow(
 		(store) => ({
 			nodes: store.nodes,
